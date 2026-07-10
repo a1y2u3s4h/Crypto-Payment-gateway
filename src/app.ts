@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import walletRoutes from "./modules/wallets/wallet.routes";
 import authRoutes from "./modules/auth/auth.routes";
+import paymentRoutes from "./modules/payments/payment.routes";
 
 import { errorMiddleware } from "./middleware/error.middleware";
 import { notFoundMiddleware } from "./middleware/notFound.middleware";
@@ -23,6 +24,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(morgan("dev"));
+
+app.use("/api/v1/payments", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Crypto Payment Gateway API");

@@ -18,6 +18,7 @@ model User {
   isVerified Boolean  @default(false)
   role       UserRole @default(USER)
   wallet     Wallet?
+  payments Payment[]
 }
 
 model Wallet {
@@ -30,7 +31,33 @@ model Wallet {
   user       User     @relation(fields: [userId], references: [id])
 }
 
+
+model Payment {
+  id              String        @id @default(cuid())
+
+  amount          Decimal       @db.Decimal(18,8)
+
+  currency        String
+
+  receiverAddress String
+
+  txHash          String?       @unique
+
+  status          PaymentStatus @default(PENDING)
+
+  createdAt       DateTime      @default(now())
+
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+}
+
 enum UserRole {
   USER
   ADMIN
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

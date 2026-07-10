@@ -3,7 +3,7 @@ import AppError from "../../exceptions/AppError";
 
 import { generateEthereumWallet } from "../../helpers/wallet.helper";
 import { encrypt } from "../../utils/encryption";
-
+import { getWalletBalance } from "../../helpers/blockchain.helper";
 import { env } from "../../config/env";
 export const createWallet = async (userId: string) => {
   // Check if wallet already exists
@@ -43,4 +43,46 @@ console.log("Secret Key:", env.WALLET_SECRET_KEY);
   });
 
   return savedWallet;
+};
+
+export const getMyWallet = async (userId: string) => {
+  const wallet = await prisma.wallet.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      address: true,
+      network: true,
+      createdAt: true,
+    },
+  });
+
+  if (!wallet) {
+    throw new AppError("Wallet not found", 404);
+  }
+
+  return wallet;
+};
+
+export const getBalance = async (userId: string) => {
+  const wallet = await prisma.wallet.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      address: true,
+    },
+  });
+
+  if (!wallet) {
+    throw new AppError("Wallet not found", 404);
+  }
+
+  const balance = await getWalletBalance(wallet.address);
+
+  return {
+    address: wallet.address,
+    balance,
+    symbol: "ETH",
+  };
 };
