@@ -7,7 +7,12 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: "Crypto Payment Gateway API",
       version: "1.0.0",
-      description: "Backend API for Crypto Payment Gateway",
+      description:
+        "Production-ready Backend API for Crypto Payment Gateway built with Node.js, Express.js, TypeScript, Prisma ORM and PostgreSQL.",
+      contact: {
+        name: "Ayush Chitransh",
+        email: "ayush@example.com",
+      },
     },
 
     servers: [
@@ -16,6 +21,10 @@ const options: swaggerJsdoc.Options = {
           process.env.NODE_ENV === "production"
             ? "https://crypto-payment-gateway-0gp5.onrender.com"
             : "http://localhost:5000",
+        description:
+          process.env.NODE_ENV === "production"
+            ? "Production Server"
+            : "Local Development Server",
       },
     ],
 
@@ -25,6 +34,7 @@ const options: swaggerJsdoc.Options = {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
+          description: "Enter JWT Token",
         },
       },
 
@@ -47,6 +57,7 @@ const options: swaggerJsdoc.Options = {
             },
             role: {
               type: "string",
+              enum: ["USER", "ADMIN"],
               example: "USER",
             },
           },
@@ -72,7 +83,7 @@ const options: swaggerJsdoc.Options = {
           properties: {
             id: {
               type: "string",
-              example: "clx123456789",
+              example: "clxyz123456",
             },
             name: {
               type: "string",
@@ -88,7 +99,54 @@ const options: swaggerJsdoc.Options = {
             },
             createdAt: {
               type: "string",
-              example: "2026-07-12T12:30:00Z",
+              example: "2026-07-12T18:30:00Z",
+            },
+          },
+        },
+
+        Wallet: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+            },
+            address: {
+              type: "string",
+              example: "0x12AB34CD56EF78901234567890ABCDEF12345678",
+            },
+            balance: {
+              type: "number",
+              example: 0.25,
+            },
+            currency: {
+              type: "string",
+              example: "ETH",
+            },
+          },
+        },
+
+        Payment: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+            },
+            amount: {
+              type: "number",
+              example: 100,
+            },
+            currency: {
+              type: "string",
+              example: "ETH",
+            },
+            status: {
+              type: "string",
+              example: "SUCCESS",
+            },
+            transactionHash: {
+              type: "string",
+              example:
+                "0x123456789abcdef123456789abcdef123456789abcdef",
             },
           },
         },
@@ -117,7 +175,6 @@ const options: swaggerJsdoc.Options = {
   },
 
   apis: [
-    "./src/modules/**/*.ts",
     "./src/modules/**/*.routes.ts",
     "./src/modules/**/*.controller.ts",
   ],
