@@ -12,6 +12,8 @@ const compression_1 = __importDefault(require("compression"));
 const wallet_routes_1 = __importDefault(require("./modules/wallets/wallet.routes"));
 const auth_routes_1 = __importDefault(require("./modules/auth/auth.routes"));
 const payment_routes_1 = __importDefault(require("./modules/payments/payment.routes"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = __importDefault(require("./config/swagger"));
 const error_middleware_1 = require("./middleware/error.middleware");
 const notFound_middleware_1 = require("./middleware/notFound.middleware");
 const app = (0, express_1.default)();
@@ -21,6 +23,7 @@ app.use((0, compression_1.default)());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)("dev"));
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 app.use("/api/v1/payments", payment_routes_1.default);
 app.get("/", (req, res) => {
     res.send("Crypto Payment Gateway API");
