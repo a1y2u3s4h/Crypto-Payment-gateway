@@ -8,6 +8,9 @@ import walletRoutes from "./modules/wallets/wallet.routes";
 import authRoutes from "./modules/auth/auth.routes";
 import paymentRoutes from "./modules/payments/payment.routes";
 
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./config/swagger";
+
 import { errorMiddleware } from "./middleware/error.middleware";
 import { notFoundMiddleware } from "./middleware/notFound.middleware";
 
@@ -24,6 +27,12 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(morgan("dev"));
+
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 app.use("/api/v1/payments", paymentRoutes);
 

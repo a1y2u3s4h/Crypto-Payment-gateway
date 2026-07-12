@@ -10,3 +10,27 @@ export const getWalletBalance = async (address: string) => {
 
   return ethers.formatEther(balance);
 };
+
+export const sendEthereumTransaction = async (
+  privateKey: string,
+  receiverAddress: string,
+  amount: number
+) => {
+  // Create wallet instance
+  const wallet = new ethers.Wallet(privateKey, provider);
+
+  // Send transaction
+  const tx = await wallet.sendTransaction({
+    to: receiverAddress,
+    value: ethers.parseEther(amount.toString()),
+  });
+
+  // Wait until transaction is mined
+  const receipt = await tx.wait();
+
+  return {
+    transactionHash: tx.hash,
+    blockNumber: receipt?.blockNumber,
+    status: receipt?.status,
+  };
+};
