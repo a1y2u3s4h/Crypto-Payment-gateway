@@ -6,10 +6,14 @@ const swaggerDocument = {
     description: "Backend API for Crypto Payment Gateway",
   },
   servers: [
-    {
-      url: "http://localhost:5000",
-    },
-  ],
+  {
+    url:
+      process.env.NODE_ENV === "production"
+        ? "https://crypto-payment-gateway-0gp5.onrender.com"
+        : "http://localhost:5000",
+  },
+],
+  
   paths: {
     "/api/v1/health": {
       get: {
